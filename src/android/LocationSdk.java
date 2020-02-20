@@ -1,4 +1,4 @@
-package com.yqtms.cordova.plugin;
+package com.yqtms.cordova.plugin.location;
 
 import com.hdgq.locationlib.LocationOpenApi;
 import com.hdgq.locationlib.listener.OnResultListener;

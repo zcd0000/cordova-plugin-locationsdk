@@ -2,48 +2,16 @@
 
 LocationSdk Plugin is a wrapper for locationsdk-1.0.0.aar developed by China Academy of Transportation Science(http://wlhy.mot.gov.cn/wlhy/detail.html?newsId=140) (for Android).
 
-
-## Clone the plugin
-
-    $ git clone https://github.com/marcozabo/cordova-plugin-scaffold.git
-
-Modify or add what you need to create your custom plugin
+## Quick Install
+downolad the entire plugin folder and install the plugin on your own project using the following command:
+npm:
+```
+   $ cordova plugin add cordova-plugin-locationsdk --variable API_KEY_FOR_ANDROID="YOUR_AMAP_ANDROID_API_KEY_IS_HERE" --variable API_KEY_FOR_IOS="YOUR_AMAP_IOS_API_KEY_IS_HERE"
+```
 
 ## Usage
-downolad the entire plugin folder and install the plugin on your own project using the following command:
-```
-   $ cordova plugin add 
-```
-
 then from your html page just use JS code to call:
 
 ```
-   Scaffold.customaction("custom message",null, null)
+   locationSdk.init(onSuccess, onError);
 ```   
-
-
-
-## Sample plugin directory structure
-
-```
-foo-plugin/
-|- plugin.xml     # xml-based manifest
-|- src/           # native source for each platform
-|  |- android/
-|  |  `- Foo.java
-|  `- ios/
-|     |- CDVFoo.h
-|     `- CDVFoo.m
-|- README.md
-`- www/
-   |- foo.js
-   `- foo.png
-```
-    
-
-### References
-
-```
-https://cordova.apache.org/docs/en/latest/plugin_ref/spec.html
-http://cordova.apache.org/docs/en/latest/guide/hybrid/plugins/index.html
-```
