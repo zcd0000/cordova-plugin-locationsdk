@@ -1,0 +1,26 @@
+{
+  "name": "cordova-plugin-locationsdk",
+  "version": "1.0.0",
+  "description": "A wrapper(android) for locationsdk-1.0.0.aar developed by China Academy of Transportation Science.",
+  "cordova": {
+    "id": "cordova-plugin-locationsdk",
+    "platforms": [
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zcd0000/cordova-plugin-locationsdk.git"
+  },
+  "keywords": [
+    "locationsdk",
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "Cundong Zhang",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/zcd0000/cordova-plugin-locationsdk/issues"
+  },
+  "homepage": "https://github.com/zcd0000/cordova-plugin-locationsdk#readme"
+}
