@@ -25,7 +25,7 @@
         <!-- For Android, the platform-specific config.xml is usually copied in res/xml -->
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="LocationSdk">
-                <param name="android-package" value="com.yqtms.cordova.plugin.LocationSdk"/>
+                <param name="android-package" value="com.yqtms.cordova.plugin.location.LocationSdk"/>
                 <param name="onload" value="true"/>
             </feature>
         </config-file>
