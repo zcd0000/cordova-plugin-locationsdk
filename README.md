@@ -1,6 +1,6 @@
-# Cordova Plugin scaffold
+# Cordova Plugin LocationSdk
 
-Simple "empty skeleton" that can be useful to develop Cordova plugins, if you don't modify it, it will trigger a simple NSLog (for ios) and a Log.i (for Android)
+LocationSdk Plugin is a wrapper for locationsdk-1.0.0.aar developed by China Academy of Transportation Science(http://wlhy.mot.gov.cn/wlhy/detail.html?newsId=140) (for Android).
 
 
 ## Clone the plugin
@@ -12,7 +12,7 @@ Modify or add what you need to create your custom plugin
 ## Usage
 downolad the entire plugin folder and install the plugin on your own project using the following command:
 ```
-   $ cordova plugin add /YOUR/LOCAL/PATH/cordova-plugin-scaffold
+   $ cordova plugin add 
 ```
 
 then from your html page just use JS code to call:
