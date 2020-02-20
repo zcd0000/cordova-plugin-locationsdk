@@ -32,7 +32,7 @@
 
         <!-- as for ios, path in wich java files will be installed -->
         <source-file src="src/android/LocationSdk.java" target-dir="app/src/main/java/com/yqtms/cordova/plugin/location"/>
-        <source-file src="src/android/res/values/locationsdk-string.xml" target-dir="app/src/main/res/values"
+        <source-file src="src/android/res/values/locationsdk-string.xml" target-dir="app/src/main/res/values"/>
         <lib-file src="src/android/libs/locationsdk-1.0.0.aar" />
 
         <!-- If your plugin contains something that should be included 

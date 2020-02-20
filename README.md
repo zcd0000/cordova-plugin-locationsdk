@@ -6,7 +6,7 @@ LocationSdk Plugin is a wrapper for locationsdk-1.0.0.aar developed by China Aca
 downolad the entire plugin folder and install the plugin on your own project using the following command:
 npm:
 ```
-   $ cordova plugin add cordova-plugin-locationsdk --variable API_KEY_FOR_ANDROID="YOUR_AMAP_ANDROID_API_KEY_IS_HERE" --variable API_KEY_FOR_IOS="YOUR_AMAP_IOS_API_KEY_IS_HERE"
+   $ cordova plugin add cordova-plugin-locationsdk
 ```
 
 ## Usage
