@@ -3,15 +3,15 @@ var exec = require('cordova/exec');
 
 var LocationSdk = function () { };
 
-LocationSdk.prototype.init = function (onSuccess, onError) {
+LocationSdk.prototype.init = function (successCallback, errorCallback) {
     exec(successCallback, errorCallback, "LocationSdk", "init");
 };
 
-LocationSdk.prototype.start = function (onSuccess, onError, shippingNoteInfos) {
+LocationSdk.prototype.start = function (successCallback, errorCallback, shippingNoteInfos) {
     exec(successCallback, errorCallback, "LocationSdk", "start", [shippingNoteInfos]);
 };
 
-LocationSdk.prototype.stop = function (onSuccess, onError, shippingNoteInfos) {
+LocationSdk.prototype.stop = function (successCallback, errorCallback, shippingNoteInfos) {
     exec(successCallback, errorCallback, "LocationSdk", "stop", [shippingNoteInfos]);
 };
 

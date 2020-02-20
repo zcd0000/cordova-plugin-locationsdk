@@ -22,7 +22,6 @@
 
     <!-- android -->
     <platform name="android">
-        <preference name="API_KEY_FOR_ANDROID" />
         <!-- For Android, the platform-specific config.xml is usually copied in res/xml -->
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="LocationSdk">
@@ -33,13 +32,14 @@
 
         <!-- as for ios, path in wich java files will be installed -->
         <source-file src="src/android/LocationSdk.java" target-dir="app/src/main/java/com/yqtms/cordova/plugin/location"/>
+        <source-file src="src/android/res/values/locationsdk-string.xml" target-dir="app/src/main/res/values"
         <lib-file src="src/android/libs/locationsdk-1.0.0.aar" />
 
         <!-- If your plugin contains something that should be included 
         in the main AndroidManifest.xml e.g.: YourActivity-->
         <config-file target="app/src/main/AndroidManifest.xml" parent="/manifest/application" mode="merge">
             <!-- AMap API Key -->
-            <meta-data android:name="com.amap.api.v2.apikey" android:value="$API_KEY_FOR_ANDROID" />
+            <meta-data android:name="com.amap.api.v2.apikey" android:value="@string/amap_apikey" />
         </config-file>
         <config-file target="app/src/main/AndroidManifest.xml" parent="/manifest" mode="merge">
             <!--用于进行网络定位-->

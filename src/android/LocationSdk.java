@@ -18,9 +18,8 @@ public class LocationSdk extends CordovaPlugin {
     private static final String LOCATION_SDK_INIT = "init";
     private static final String LOCATION_SDK_START = "start";
     private static final String LOCATION_SDK_STOP = "stop";
-    private static final String GOV_APP_SECURITY = "appSecurity";
+    private static final String WLHY_APP_SECURITY = "wlhyAppSecurity";
     private static final String ENTERPRISE_SENDER_CODE = "enterpriseSenderCode";
-    private static final String BUILD_TYPE_DEMO = "demo";
     private static final String BUILD_TYPE_DEBUG = "debug";
     private static final String BUILD_TYPE_RELEASE = "release";
 
@@ -51,9 +50,9 @@ public class LocationSdk extends CordovaPlugin {
 
             LOG.d(TAG, "Location is initializing...");
 
-            String appSecurity = mPref.getString(GOV_APP_SECURITY, null);
+            String appSecurity = mPref.getString(WLHY_APP_SECURITY, null);
             String enterpriseSenderCode = mPref.getString(ENTERPRISE_SENDER_CODE, null);
-            String environment = BUILD_TYPE_DEMO.equals(Build.TYPE) ? BUILD_TYPE_DEBUG : Build.TYPE;
+            String environment = Build.TYPE;
 
             if (appSecurity.isEmpty()) {
                 String errMsg = "Invalid appSecurity: null";
@@ -67,7 +66,7 @@ public class LocationSdk extends CordovaPlugin {
                 callbackContext.error(errMsg);
                 return false;
             }
-            if (!environment.equals(BUILD_TYPE_DEBUG) && !environment.equals(BUILD_TYPE_DEMO) && !environment.equals(BUILD_TYPE_RELEASE)) {
+            if (!environment.equals(BUILD_TYPE_DEBUG) && !environment.equals(BUILD_TYPE_RELEASE)) {
                 String errMsg = "Invalid BuildType: " + Build.TYPE;
                 LOG.e(TAG, errMsg);
                 callbackContext.error(errMsg);
