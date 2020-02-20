@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-locationsdk",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A wrapper(android) for locationsdk-1.0.0.aar developed by China Academy of Transportation Science.",
   "cordova": {
     "id": "cordova-plugin-locationsdk",
