@@ -1,8 +1,9 @@
-/*global cordova, module*/
 var exec = require('cordova/exec');
 
-var LocationSdkOriginal = (function () {
-    /** Initilize the location sdk */
+var LocationSdk = (function () {
+    function LocationSdk() {
+    }
+     /** Initilize the location sdk */
     LocationSdk.prototype.init = function (successCallback, errorCallback) {
         exec(successCallback, errorCallback, "LocationSdk", "init");
     };
@@ -14,8 +15,7 @@ var LocationSdkOriginal = (function () {
     LocationSdk.prototype.stop = function (successCallback, errorCallback, shippingNoteInfos) {
         exec(successCallback, errorCallback, "LocationSdk", "stop", [shippingNoteInfos]);
     };
+    return LocationSdk;
 })();
 
-var LocationSdk = new LocationSdkOriginal();
-
-export { LocationSdk };
+module.exports = new LocationSdk();
