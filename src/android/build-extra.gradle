@@ -1,5 +1,6 @@
 
 dependencies {
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.lzy.net:okgo:3.0.4'
     implementation 'com.alibaba:fastjson:1.2.61'
     implementation 'org.bouncycastle:bcprov-jdk15on:1.47'
