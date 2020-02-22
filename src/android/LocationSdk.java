@@ -1,5 +1,6 @@
 package com.yqtms.cordova.plugin.location;
 
+import com.google.gson.Gson;
 import com.hdgq.locationlib.LocationOpenApi;
 import com.hdgq.locationlib.entity.ShippingNoteInfo;
 import com.hdgq.locationlib.listener.OnResultListener;
@@ -8,6 +9,7 @@ import org.apache.cordova.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.apache.cordova.CordovaPlugin;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.Build;
@@ -42,14 +44,12 @@ public class LocationSdk extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        LOG.d(TAG, "action code:" + action);
         // As sdk is initializing
         if (LOCATION_SDK_INIT.equals(action)) {
-            LOG.d(TAG, "Location is initializing...");
             String appSecurity = mPref.getString(WLHY_APP_SECURITY, null);
             String enterpriseSenderCode = mPref.getString(ENTERPRISE_SENDER_CODE, null);
             String environment = BuildConfig.BUILD_TYPE;
-            LOG.d(TAG, String.format("appSecurity:%s, enterpriseSenderCode:%s. environment: %s", appSecurity, enterpriseSenderCode,enterpriseSenderCode));
+            LOG.d(TAG, String.format("appSecurity:%s, enterpriseSenderCode:%s. environment: %s", appSecurity, enterpriseSenderCode, enterpriseSenderCode));
             if (appSecurity.isEmpty()) {
                 String errMsg = "Invalid appSecurity: null";
                 LOG.e(TAG, errMsg);
@@ -78,23 +78,9 @@ public class LocationSdk extends CordovaPlugin {
             );
             return true;
         } else if (LOCATION_SDK_START.equals(action)) { // Send start location and ticket info
-            LOG.d(TAG, "Sending start location and tickets...");
-            ShippingNoteInfo noteInfoList[] = (ShippingNoteInfo[]) args.get(0);
-            if(noteInfoList.equals(null) || noteInfoList.length == 0) {
-                callbackContext.error("Invaid ShippingNoteInfo[] parameters!");
-                return false;
-            }
-            LocationOpenApi.start(mContext, noteInfoList, buildListener(callbackContext));
-            return true;
+            return locationSdkOperations(true, args, callbackContext);
         } else if (LOCATION_SDK_STOP.equals(action)) { // Send end location and ticket info
-            LOG.d(TAG, "Sending end location and tickets...");
-            ShippingNoteInfo noteInfoList[] = (ShippingNoteInfo[]) args.get(0);
-            if(noteInfoList.equals(null) || noteInfoList.length == 0) {
-                callbackContext.error("Invaid ShippingNoteInfo[] parameters!");
-                return false;
-            }
-            LocationOpenApi.stop(mContext, noteInfoList, buildListener(callbackContext));
-            return true;
+            return locationSdkOperations(false, args, callbackContext);
         }
         callbackContext.error("Invalid function is invoked!");
         return false;
@@ -113,4 +99,26 @@ public class LocationSdk extends CordovaPlugin {
             }
         };
     }
+
+    private Boolean locationSdkOperations(Boolean isStart, JSONArray args, CallbackContext callbackContext) {
+        try {
+            String noteInfosJson = args.getString(0);
+            Gson gson = new Gson();
+            ShippingNoteInfo[] noteInfoList = gson.fromJson(noteInfosJson, ShippingNoteInfo[].class);
+            if (noteInfoList.equals(null) || noteInfoList.length == 0) {
+                callbackContext.error("Invaid ShippingNoteInfo[] parameters!");
+                return false;
+            }
+            if (isStart) {
+                LocationOpenApi.start(mContext, noteInfoList, buildListener(callbackContext));
+            } else {
+                LocationOpenApi.stop(mContext, noteInfoList, buildListener(callbackContext));
+            }
+            return true;
+        } catch (Exception e) {
+            callbackContext.error(e.getMessage());
+        }
+        return false;
+    }
+
 }
