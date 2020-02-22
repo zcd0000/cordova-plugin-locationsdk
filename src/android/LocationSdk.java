@@ -94,8 +94,8 @@ public class LocationSdk extends CordovaPlugin {
             }
 
             @Override
-            public void onFailure(String s, String s1) {
-                callbackContext.error(String.format("ErrorCode: %s, ErrorMsg: %s!", s, s1));
+            public void onFailure(String code, String errMsg) {
+                callbackContext.error(String.format("%s(%s)!", errMsg, code));
             }
         };
     }
