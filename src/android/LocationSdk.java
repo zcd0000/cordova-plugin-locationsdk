@@ -62,6 +62,8 @@ public class LocationSdk extends CordovaPlugin {
                 callbackContext.error(errMsg);
                 return false;
             }
+            // Replace leader code: "ESC:" to avoid to get invalid enterpriseSenderCode while code number length exceeding 10 
+            enterpriseSenderCode = enterpriseSenderCode.substring(4);
             if (!environment.equals(BUILD_TYPE_DEBUG) && !environment.equals(BUILD_TYPE_RELEASE)) {
                 String errMsg = "Invalid environment: " + environment;
                 LOG.e(TAG, errMsg);
