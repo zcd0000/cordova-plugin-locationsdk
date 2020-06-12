@@ -1,8 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- The id must be unambiguous, reverse-domain format is used -->
-<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="cordova-plugin-locationsdk" version="1.0.0">
-
-    <!-- Name, description and other stuff-->
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-plugin-locationsdk" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0">
     <name>cordova-plugin-locationsdk</name>
     <description>A wrapper(android) for locationsdk-1.0.0.aar developed by China Academy of Transportation Science.</description>
     <license>Apache 2.0</license>
@@ -10,63 +7,58 @@
     <author>Cundong Zhang</author>
     <repo>https://github.com/zcd0000/cordova-plugin-locationsdk.git</repo>
     <issue>https://github.com/zcd0000/cordova-plugin-locationsdk/issues</issue>
-
-    <!-- Define the path to the common JavaScript interface -->
-    <js-module src="www/locationSdk.js" name="LocationSdk">
-        <!-- indicates that the module.exports is inserted into the window object as window.customaction You can have as many <clobbers> as you like.-->
+    <js-module name="LocationSdk" src="www/locationSdk.js">
         <clobbers target="LocationSdk" />
     </js-module>
-
-    <!-- The platform tag specifies a corresponding set of 
-    native code for the platform specifyed by the attribute name-->
-
-    <!-- android -->
     <platform name="android">
-        <!-- For Android, the platform-specific config.xml is usually copied in res/xml -->
-        <config-file target="res/xml/config.xml" parent="/*">
+        <config-file parent="/*" target="res/xml/config.xml">
             <feature name="LocationSdk">
-                <param name="android-package" value="com.yqtms.cordova.plugin.location.LocationSdk"/>
-                <param name="onload" value="true"/>
+                <param name="android-package" value="com.yqtms.cordova.plugin.location.LocationSdk" />
+                <param name="onload" value="true" />
             </feature>
         </config-file>
-
-        <!-- as for ios, path in wich java files will be installed -->
-        <source-file src="src/android/LocationSdk.java" target-dir="app/src/main/java/com/yqtms/cordova/plugin/location"/>
-        <source-file src="src/android/res/values/locationsdk-string.xml" target-dir="app/src/main/res/values"/>
+        <source-file src="src/android/LocationSdk.java" target-dir="app/src/main/java/com/yqtms/cordova/plugin/location" />
+        <source-file src="src/android/res/values/locationsdk-string.xml" target-dir="app/src/main/res/values" />
         <lib-file src="src/android/libs/locationsdk-1.0.0.aar" />
-
-        <!-- If your plugin contains something that should be included 
-        in the main AndroidManifest.xml e.g.: YourActivity-->
-        <config-file target="app/src/main/AndroidManifest.xml" parent="/manifest/application" mode="merge">
-            <!-- AMap API Key -->
+        <config-file mode="merge" parent="/manifest/application" target="app/src/main/AndroidManifest.xml">
             <meta-data android:name="com.amap.api.v2.apikey" android:value="@string/amap_apikey" />
         </config-file>
-        <config-file target="app/src/main/AndroidManifest.xml" parent="/manifest" mode="merge">
-            <!--用于进行网络定位-->
-            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
-            <!--用于访问GPS定位-->
-            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-            <!-- 获取运营商信息，用于支持提供运营商信息相关的接口-->
-            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-            <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位-->
-            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
-            <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
-            <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
-            <!--用于访问网络，网络定位需要上网-->
-            <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-            <!-- 用于读取手机当前的状态-->
-            <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
-            <!-- 写入扩展存储，向扩展卡写入数据，用于写入缓存定位数据-->
-            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-            <uses-permission android:name="android.permission.MANAGE_DOCUMENTS"/>
-            <!--定位包、导航包需要的额外权限（注：基础权限也需要） -->
+        <config-file mode="merge" parent="/manifest" target="app/src/main/AndroidManifest.xml">
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+            <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
             <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-            <!-- GPS -->
             <uses-feature android:name="android.hardware.location" />
             <uses-feature android:name="android.hardware.location.gps" />
         </config-file>
-        <!-- extra build gradle configration-->
-        <framework src="src/android/build-extra.gradle" custom="true" type="gradleReference"/>
+        <framework custom="true" src="src/android/build-extra.gradle" type="gradleReference" />
     </platform>
+    <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="locSdkPlugin">
+                <param name="ios-package" value="locSdkPlugin" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
 
+        <header-file src="src/ios/LocationSdk.h" />
+        <source-file src="src/ios/LocationSdk.m" />
+
+        <framework src="src/ios/libs/MapManager.framework" custom="true"/>
+        
+        <podspec>
+            <config>
+            </config>
+              <pods use-frameworks="true">
+                <pod name="AMapLocation" />
+                <pod name="GMObjC" spec="3.0.0" />
+              </pods>
+        </podspec>
+    </platform>
 </plugin>
