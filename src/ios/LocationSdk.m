@@ -35,6 +35,7 @@ typedef enum  {
     
     NSLog(@"appId:%@, appSecurity:%@, enterpriseSenderCode:%@, environment: %@",appId,appSecurity,enterpriseSenderCode,environment);
     
+    [AMapServices sharedServices].apiKey = aMapKey;
     if(appSecurity == nil || [appSecurity isEqualToString:@""]){
         NSString* errMsg = @"Invalid appSecurity: null";
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errMsg];
