@@ -41,8 +41,8 @@
     </platform>
     <platform name="ios">
         <config-file parent="/*" target="config.xml">
-            <feature name="locSdkPlugin">
-                <param name="ios-package" value="locSdkPlugin" />
+            <feature name="LocationSdk">
+                <param name="ios-package" value="LocationSdk" />
                 <param name="onload" value="true" />
             </feature>
         </config-file>
