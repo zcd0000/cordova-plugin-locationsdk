@@ -29,8 +29,8 @@ typedef enum  {
     CDVPluginResult* pluginResult = nil;
     
     NSString* appId = [[NSBundle mainBundle]bundleIdentifier];
-    NSString* appSecurity = [self.commandDelegate.settings objectForKey:[ENTERPRISE_SENDER_CODE lowercaseString]];
-    NSString* enterpriseSenderCode = [self.commandDelegate.settings objectForKey:[WLHY_APP_SECURITY lowercaseString]];
+    NSString* appSecurity = [self.commandDelegate.settings objectForKey:[WLHY_APP_SECURITY lowercaseString]];
+    NSString* enterpriseSenderCode = [self.commandDelegate.settings objectForKey:[ENTERPRISE_SENDER_CODE lowercaseString]];
     NSString* aMapKey = [self.commandDelegate.settings objectForKey:AMAP_KEY];
     NSString* environment = [self decideDebugOrRelease];;
     
@@ -42,14 +42,14 @@ typedef enum  {
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errMsg];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
-
-    appSecurity = [appSecurity substringFromIndex:4];
     
     if([self isEmpty:enterpriseSenderCode]){
         NSString* errMsg = @"Invalid enterpriseSenderCode: null";
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errMsg];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
+
+    enterpriseSenderCode = [enterpriseSenderCode substringFromIndex:4];
     
     MapService* service = [MapService new];
     [service openServiceWithAppId:appId appSecurity:appSecurity enterpriseSenderCode:enterpriseSenderCode environment:environment listener:^(id model,NSError* error){
@@ -109,14 +109,21 @@ typedef enum  {
 
 - (void)locationSdkOperation:(BOOL)isStart andCommand:(CDVInvokedUrlCommand*)command {
 
-    NSString* noteInfosJson = [command.arguments objectAtIndex:0];
-    if([self isEmpty:noteInfosJson]){
+    NSArray* noteInfosArr = [command.arguments objectAtIndex:0];
+    
+    if(noteInfosArr == nil || [noteInfosArr count] == 0){
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:SWIFT_CDVCommandStatus_ERROR messageAsString:@"运单信息不能为空！"];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         return;
     }
-    NSData *jsonData = [noteInfosJson dataUsingEncoding:NSUTF8StringEncoding];
-    NSArray *noteInfosArr = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:nil];
+    // NSString* noteInfosJson = [command.arguments objectAtIndex:0];
+    // if([self isEmpty:noteInfosJson]){
+    //     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:SWIFT_CDVCommandStatus_ERROR messageAsString:@"运单信息不能为空！"];
+    //     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    //     return;
+    // }
+    // NSData *jsonData = [noteInfosJson dataUsingEncoding:NSUTF8StringEncoding];
+    // NSArray *noteInfosArr = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:nil];
     //假数据
 //    NSArray *noteInfosArr = [NSArray arrayWithObject:@{@"shippingNoteNumber":@"4560987",@"serialNumber":@"1245790",@"startCountrySubdivisionCode":@"320571000000",@"endCountrySubdivisionCode":@"320506405000"}];
     
