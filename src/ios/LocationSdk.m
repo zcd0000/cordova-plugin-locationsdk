@@ -8,6 +8,7 @@
 NSString* const WLHY_APP_SECURITY = @"wlhyAppSecurity";
 NSString* const ENTERPRISE_SENDER_CODE = @"enterpriseSenderCode";
 NSString* const AMAP_KEY = @"amap_apikey";
+NSString* const IS_DEBUG = @"isDebug"; //我们需要在ionic主目录下的config文件platform为ios的地方添加name为isDebug的preference用以判断是不是启动的debug模式
 NSString* const BUILD_TYPE_DEBUG = @"debug";
 NSString* const BUILD_TYPE_RELEASE = @"release";
 NSString* const CODE_NAME = @"code";
@@ -31,17 +32,20 @@ typedef enum  {
     NSString* appSecurity = [self.commandDelegate.settings objectForKey:[ENTERPRISE_SENDER_CODE lowercaseString]];
     NSString* enterpriseSenderCode = [self.commandDelegate.settings objectForKey:[WLHY_APP_SECURITY lowercaseString]];
     NSString* aMapKey = [self.commandDelegate.settings objectForKey:AMAP_KEY];
-    NSString* environment = BUILD_TYPE_DEBUG;//后面需要根据环境变量获取
+    NSString* environment = [self decideDebugOrRelease];;
     
     NSLog(@"appId:%@, appSecurity:%@, enterpriseSenderCode:%@, environment: %@",appId,appSecurity,enterpriseSenderCode,environment);
     
-    if(appSecurity == nil || [appSecurity isEqualToString:@""]){
+    [AMapServices sharedServices].apiKey = aMapKey;
+    if([self isEmpty:appSecurity]){
         NSString* errMsg = @"Invalid appSecurity: null";
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errMsg];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
+
+    appSecurity = [appSecurity substringFromIndex:4];
     
-    if(enterpriseSenderCode == nil || [enterpriseSenderCode isEqualToString:@""]){
+    if([self isEmpty:enterpriseSenderCode]){
         NSString* errMsg = @"Invalid enterpriseSenderCode: null";
         pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:errMsg];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
@@ -50,21 +54,22 @@ typedef enum  {
     MapService* service = [MapService new];
     [service openServiceWithAppId:appId appSecurity:appSecurity enterpriseSenderCode:enterpriseSenderCode environment:environment listener:^(id model,NSError* error){
         
-        NSString* modelStr = [self DataTOjsonString:model];
-        NSString * str = [NSString stringWithFormat:@"open方法生成的model为：%@,error为：%@",modelStr,error];
-        NSLog(str);
-        
         NSString * code = [model objectForKey:CODE_NAME];
-        NSString * message = [self DataTOjsonString:[model objectForKey:MESSAGE_NAME]];
+        NSString * message = [self convertUTF8:[model objectForKey:MESSAGE_NAME]];
         
+       
+        NSString * str = [NSString stringWithFormat:@"open方法生成的model为：%@,error为：%@",model,error];
+        NSLog(str);
+
+        CDVPluginResult* pluginResultFinal;
         if([code isEqualToString:[NSString stringWithFormat: @"%ld", (long)OpenSucceed]]){
 
-           CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:message];
+           pluginResultFinal = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:message];
         }else{
 
-           CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:message];
+           pluginResultFinal = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:message];
         }
-        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        [self.commandDelegate sendPluginResult:pluginResultFinal callbackId:command.callbackId];
         
 //        [self alertDialog:str andIsError:NO];
     }];
@@ -78,23 +83,38 @@ typedef enum  {
 }
 
 //私有帮助方法
- - (NSString*)DataTOjsonString:(id)object{
-     NSString *jsonString = nil;
-     NSError *error;
-     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:object
-                                                        options:NSJSONWritingPrettyPrinted
-                                                          error:&error];
-     if (!jsonData) {
-         return nil;
-     } else {
-         jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+//私有帮助方法
+ - (NSString*)convertUTF8:(NSString*)message{
+     if(message == nil)
+     {
+         return message;
      }
-     return jsonString;
+     NSData* tempData = [message dataUsingEncoding:NSUTF8StringEncoding];
+     message = [[NSString alloc] initWithData:tempData encoding:NSUTF8StringEncoding];
+     return message;
+//     NSString *jsonString = nil;
+//     NSError *error;
+//     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:object
+//                                                        options:NSJSONWritingPrettyPrinted
+//                                                          error:&error];
+//     if (!jsonData) {
+//         return nil;
+//     } else {
+//         jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+//     }
+     
+//     return jsonString;
  }
+
 
 - (void)locationSdkOperation:(BOOL)isStart andCommand:(CDVInvokedUrlCommand*)command {
 
     NSString* noteInfosJson = [command.arguments objectAtIndex:0];
+    if([self isEmpty:noteInfosJson]){
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:SWIFT_CDVCommandStatus_ERROR messageAsString:@"运单信息不能为空！"];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        return;
+    }
     NSData *jsonData = [noteInfosJson dataUsingEncoding:NSUTF8StringEncoding];
     NSArray *noteInfosArr = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:nil];
     //假数据
@@ -105,49 +125,64 @@ typedef enum  {
     if(isStart){
 
         [service startLocationWithShippingNoteInfos:noteInfosArr listener:^(id model,NSError* error){
-            NSString* modelStr = [self DataTOjsonString:model];
-            NSString * str = [NSString stringWithFormat:@"start方法生成的model为：%@,error为：%@",modelStr,error];
-            NSLog(str);
             
-            NSString * code = [model objectForKey:CODE_NAME];
-            NSString * message = [self DataTOjsonString:[model objectForKey:MESSAGE_NAME]];
-            
-            CDVPluginResult* pluginResult;
-            if([code isEqualToString:[NSString stringWithFormat: @"%ld", (long)StartSucceed]]){
-                
-               pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:message];
-                
-            }else{
-                
-               pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:message];
-                
-            }
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+            [self buildResult:YES andModel:model andError:error andCommand:command];
             
 //            [self alertDialog:str andIsError:NO];
         }];
     }else{
 
         [service stopLocationWithShippingNoteInfos:noteInfosArr listener:^(id model,NSError* error){
-            NSString* modelStr = [self DataTOjsonString:model];
-            NSString * str = [NSString stringWithFormat:@"stop方法生成的model为：%@,error为：%@",modelStr,error];
-            NSLog(str);
             
-            NSString * code = [model objectForKey:CODE_NAME];
-            NSString * message = [self DataTOjsonString:[model objectForKey:MESSAGE_NAME]];
+            [self buildResult:NO andModel:model andError:error andCommand:command];
             
-            CDVPluginResult* pluginResult;
-            if([code isEqualToString:[NSString stringWithFormat: @"%ld", (long)StopSucceed]]){
-
-               pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:message];
-            }else{
-
-               pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:message];
-            }
-            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         }];
     }
     
+}
+
+- (void)buildResult:(BOOL)isStart andModel:(id)model andError:(NSError*)error andCommand:(CDVInvokedUrlCommand*)command{
+    
+    ResultCode succeedCode = StartSucceed;
+    if(!isStart){
+        succeedCode = StopSucceed;
+    }
+    
+    NSString * code = [model objectForKey:CODE_NAME];
+    NSString * message = [self convertUTF8:[model objectForKey:MESSAGE_NAME]];
+    
+    NSString * str = [NSString stringWithFormat:@"start方法生成的model为：%@,error为：%@",model,error];
+    NSLog(str);
+    
+    CDVPluginResult* pluginResult;
+    if([code isEqualToString:[NSString stringWithFormat: @"%ld", (long)succeedCode]]){
+        
+       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:message];
+        
+    }else{
+        
+       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:message];
+        
+    }
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (NSString*)decideDebugOrRelease{
+    NSString* model = [self.commandDelegate.settings objectForKey:IS_DEBUG];
+    if([self isEmpty:model]|| ![[model lowercaseString] isEqualToString:@"false"]){
+        return BUILD_TYPE_DEBUG;
+    }
+    return BUILD_TYPE_RELEASE;
+}
+
+- (BOOL) isEmpty:(id)str {
+    return str == nil
+    || [str isEqualToString:@""]
+    || [str isKindOfClass:[NSNull class]]
+    || ([str respondsToSelector:@selector(length)]
+        && [(NSData *)str length] == 0)
+    || ([str respondsToSelector:@selector(count)]
+        && [(NSArray *)str count] == 0);
 }
 
 
