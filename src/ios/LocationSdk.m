@@ -175,7 +175,7 @@ typedef enum  {
 }
 
 - (NSString*)decideDebugOrRelease{
-    NSString* model = [self.commandDelegate.settings objectForKey:IS_DEBUG];
+    NSString* model = [self.commandDelegate.settings objectForKey:[IS_DEBUG lowercaseString]];
     if([self isEmpty:model]|| ![[model lowercaseString] isEqualToString:@"false"]){
         return BUILD_TYPE_DEBUG;
     }
