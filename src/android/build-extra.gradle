@@ -1,9 +1,37 @@
+// 下方的配置指示部委的locationsdk存储在阿里云的私有maven上，注意，我们自定义的module中build.gradle当中也有下面这一段配置。需要如果修改了maven地址就需要改两个地方了
+allprojects {
+    repositories {
+        maven {
+            url 'https://maven.aliyun.com/repository/public'
+        }
+        maven {
+            credentials {
+                username '5f8177a7fa82bfeb80dac335'
+                password 'Y-wMwM3seCsy'
+            }
+            url 'https://packages.aliyun.com/maven/repository/2041086-release-UKhZIY/'
+        }
+        maven {
+            credentials {
+                username '5f8177a7fa82bfeb80dac335'
+                password 'Y-wMwM3seCsy'
+            }
+            url 'https://packages.aliyun.com/maven/repository/2041086-snapshot-shWcWD/'
+        }
+        mavenCentral()
+    }
+}
 
 dependencies {
-    implementation 'com.google.code.gson:gson:2.8.6'
-    implementation 'com.lzy.net:okgo:3.0.4'
-    implementation 'com.alibaba:fastjson:1.2.61'
-    implementation 'org.bouncycastle:bcprov-jdk15on:1.47'
+    // implementation 'com.google.code.gson:gson:2.8.6'
+    // implementation 'com.lzy.net:okgo:3.0.4'
+    // implementation 'com.alibaba:fastjson:1.2.61'
+    // implementation 'org.bouncycastle:bcprov-jdk15on:1.47'
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-    implementation files("./libs/locationsdk-1.0.0.aar")
+    implementation files("./libs/locationsdk.aar")
+    api 'com.yqtms.logis:locationsdk:1.0.0'
+    api 'com.amap.api:3dmap:7.5.0'
+    // api(name:'locationsdk', ext:'aar')
+    // implementation files("./libs/AMap3DMap_7.6.0_AMapLocation_5.1.0_20200819.jar")AMap3DMap_7.5.0_20200610.aar
+    // implementation files("./libs/AMap3DMap_7.5.0_20200610.aar")
 }

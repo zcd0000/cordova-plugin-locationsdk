@@ -17,25 +17,19 @@
                 <param name="onload" value="true" />
             </feature>
         </config-file>
+        <!-- android -->
+
         <source-file src="src/android/LocationSdk.java" target-dir="app/src/main/java/com/yqtms/cordova/plugin/location" />
         <source-file src="src/android/res/values/locationsdk-string.xml" target-dir="app/src/main/res/values" />
-        <lib-file src="src/android/libs/locationsdk-1.0.0.aar" />
+        <lib-file src="src/android/libs/locationsdk.aar" />
         <config-file mode="merge" parent="/manifest/application" target="app/src/main/AndroidManifest.xml">
+            <!-- 定位需要的服务 -->
             <meta-data android:name="com.amap.api.v2.apikey" android:value="@string/amap_apikey" />
+            <activity android:label="客户地图" android:name="com.yqtms.locationsdk.amap.activity.MapActivity" android:theme="@android:style/Theme.NoTitleBar" />
+            <activity android:label="我的轨迹" android:name="com.yqtms.locationsdk.amap.activity.TraceActivity" android:theme="@android:style/Theme.NoTitleBar" />
         </config-file>
         <config-file mode="merge" parent="/manifest" target="app/src/main/AndroidManifest.xml">
-            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-            <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-            <uses-permission android:name="android.permission.INTERNET" />
-            <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
             <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
-            <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-            <uses-feature android:name="android.hardware.location" />
-            <uses-feature android:name="android.hardware.location.gps" />
         </config-file>
         <framework custom="true" src="src/android/build-extra.gradle" type="gradleReference" />
     </platform>
@@ -51,7 +45,7 @@
         <source-file src="src/ios/LocationSdk.m" />
 
         <framework src="src/ios/libs/MapManager.framework" custom="true"/>
-        
+         
         <podspec>
             <config>
             </config>
