@@ -177,20 +177,20 @@ public class LocationSdk extends CordovaPlugin {
         return false;
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent){
+    // @Override
+    // public void onActivityResult(int requestCode, int resultCode, Intent intent){
 
-        super.onActivityResult(requestCode, resultCode, intent);
+    //     super.onActivityResult(requestCode, resultCode, intent);
 
-        Log.d(TAG, " request code" + requestCode);
-        Log.d(TAG, " result code" + resultCode);
+    //     Log.d(TAG, " request code" + requestCode);
+    //     Log.d(TAG, " result code" + resultCode);
 
-        if(resultCode==Activity.RESULT_OK){
-            cCtx.success("success");
-        } else {
-            cCtx.error("fail");
-        }
-    }
+    //     if(resultCode==Activity.RESULT_OK){
+    //         cCtx.success("success");
+    //     } else {
+    //         cCtx.error("fail");
+    //     }
+    // }
 
     private OnResultListener buildListener(CallbackContext callbackContext) {
         return new OnResultListener() {
@@ -235,8 +235,8 @@ public class LocationSdk extends CordovaPlugin {
             AMapSessionInfo sessionInfo = JSON.parseObject(sessionInfoStr,AMapSessionInfo.class);
             UpdatePositionOptions options = JSON.parseObject(optionsStr, UpdatePositionOptions.class);
             // just for test
-            options.setInterval(10);
-            options.setMinDistance(1);
+            // options.setInterval(10);
+            // options.setMinDistance(1);
 
             Constants.saveSessionInfo(mContext,sessionInfo);
             Constants.saveUpdatePositionOptions(mContext,options);
