@@ -96,7 +96,7 @@ public class TraceActivity extends Activity {
         }
         backColor = backColor==null?"#000000":backColor;
         mRlTitil.setBackgroundColor(Color.parseColor(backColor));
-        mDistance.setText((routeInfo.getDistance() / 1000) + " 公里") ;
+        mDistance.setText(routeInfo.getDistance() + " 公里") ;
 
         if (title != null ) {
             setTitle(title);
