@@ -286,7 +286,6 @@ public class MapActivity extends Activity implements LocationSource,
         List<AMapLocationPoint> points = vehicleLocationInfo.getPoints();
         List<LatLng> allPoints = new ArrayList<>();
 
-        allPoints.add(firstPoint);
         for (AMapLocationPoint point: points) {
             LatLng p = new LatLng(point.getLatitude(),point.getLongitude());
             allPoints.add(p);
@@ -304,6 +303,7 @@ public class MapActivity extends Activity implements LocationSource,
         aMap.addPolyline(plineOptions);
 
         // 让全部轨迹点在地图上可见
+        allPoints.add(firstPoint);
         allPoints.add(lastPoint);
         moveCamera(allPoints);
         // 插入装卸货点
