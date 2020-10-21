@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-locationsdk" version="1.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0">
+<plugin id="cordova-plugin-locationsdk" version="1.0.0" 
+    xmlns="http://apache.org/cordova/ns/plugins/1.0">
     <name>cordova-plugin-locationsdk</name>
     <description>A wrapper(android) for locationsdk-1.0.0.aar developed by China Academy of Transportation Science.</description>
     <license>Apache 2.0</license>
@@ -23,6 +24,17 @@
         <source-file src="src/android/res/values/locationsdk-string.xml" target-dir="app/src/main/res/values" />
         <lib-file src="src/android/libs/locationsdk.aar" />
         <config-file mode="merge" parent="/manifest/application" target="app/src/main/AndroidManifest.xml">
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+            <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+            <uses-feature android:name="android.hardware.location" />
+            <uses-feature android:name="android.hardware.location.gps" />
             <!-- 定位需要的服务 -->
             <meta-data android:name="com.amap.api.v2.apikey" android:value="@string/amap_apikey" />
             <activity android:label="客户地图" android:name="com.yqtms.locationsdk.amap.activity.MapActivity" android:theme="@android:style/Theme.NoTitleBar" />
@@ -45,14 +57,14 @@
         <source-file src="src/ios/LocationSdk.m" />
 
         <framework src="src/ios/libs/MapManager.framework" custom="true"/>
-         
+
         <podspec>
             <config>
             </config>
-              <pods use-frameworks="true">
+            <pods use-frameworks="true">
                 <pod name="AMapLocation" />
                 <pod name="GMObjC" spec="3.0.0" />
-              </pods>
+            </pods>
         </podspec>
     </platform>
 </plugin>
