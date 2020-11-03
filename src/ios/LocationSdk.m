@@ -3,7 +3,17 @@
 #import <AMapLocationKit/AMapLocationKit.h>
 #import <AMapFoundationKit/AMapFoundationKit.h>
 #import <CoreLocation/CoreLocation.h>
+#import <MJExtension/MJExtension.h>
+
 #import "LocationSdk.h"
+#import "TraceViewController.h"
+#import "MapViewController.h"
+#import "MMLocationTracker.h"
+#import "MMLocationManager.h"
+#import "AMapRouteInfo.h"
+#import "AMapVehicleLocationInfo.h"
+#import "UpdatePositionOptions.h"
+#import "UtilsForLocationsdk.h"
 
 NSString* const WLHY_APP_SECURITY = @"wlhyAppSecurity";
 NSString* const ENTERPRISE_SENDER_CODE = @"enterpriseSenderCode";
@@ -63,7 +73,22 @@ typedef enum  {
 
         CDVPluginResult* pluginResultFinal;
         if([code isEqualToString:[NSString stringWithFormat: @"%ld", (long)OpenSucceed]]){
-
+            // 开启定时任务上传位置信息
+//           NSDictionary* sessionInfoDic = [command.arguments objectAtIndex:0];
+//           NSDictionary* optionsDic = [command.arguments objectAtIndex:1];
+//
+//           // 添加自定义功能
+//            MMLocationManager *locationManager = [MMLocationManager sharedManager];
+//            __weak MMLocationManager *tempManager = locationManager;
+//            locationManager.onReceiveLocation = ^(CLLocation * location){
+//                // 处理获取到的位置信息
+//                CLLocationCoordinate2D temp = location.coordinate;
+//                NSLog(@"执行onReceiveLocation,distanceFilter:%f,latitude:%f,longitude:%f",[tempManager distanceFilter],temp.latitude,temp.longitude);
+//
+//            };
+//            MMLocationTracker *locationTracker = [MMLocationTracker sharedManager];
+//            [locationTracker startTimer];
+            
            pluginResultFinal = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:message];
         }else{
 
@@ -71,15 +96,48 @@ typedef enum  {
         }
         [self.commandDelegate sendPluginResult:pluginResultFinal callbackId:command.callbackId];
         
-//        [self alertDialog:str andIsError:NO];
     }];
 }
+
      
 - (void)start:(CDVInvokedUrlCommand*)command{
     [self locationSdkOperation:YES andCommand:command];
 }
 - (void)stop:(CDVInvokedUrlCommand*)command{
     [self locationSdkOperation:NO andCommand:command];
+}
+
+- (void)startUpdatePosition:(CDVInvokedUrlCommand*)command{
+    
+}
+- (void)stopUpdatePosition:(CDVInvokedUrlCommand*)command{
+    
+}
+- (void)showMap:(CDVInvokedUrlCommand*)command{
+    NSDictionary* vehicleLocationInfo = [command.arguments objectAtIndex:0];
+    NSString* title = [command.arguments objectAtIndex:1];
+    
+    AMapVehicleLocationInfo *locationInfo = [AMapVehicleLocationInfo mj_objectWithKeyValues:vehicleLocationInfo];
+    
+    MapViewController *vc = [[MapViewController alloc] initWithInfo:locationInfo traceTitle:title];
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self.viewController presentViewController:vc animated:YES completion:nil];
+    
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"OK"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+- (void)traceMap:(CDVInvokedUrlCommand*)command{
+    NSDictionary* routeInfoDic = [command.arguments objectAtIndex:0];
+    NSString* title = [command.arguments objectAtIndex:1];
+    
+    AMapRouteInfo *routeInfo = [AMapRouteInfo mj_objectWithKeyValues:routeInfoDic];
+    
+    TraceViewController *vc = [[TraceViewController alloc] initWithInfo:routeInfo traceTitle:title];
+    vc.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self.viewController presentViewController:vc animated:YES completion:nil];
+    
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"OK"];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
 //私有帮助方法
@@ -92,18 +150,6 @@ typedef enum  {
      NSData* tempData = [message dataUsingEncoding:NSUTF8StringEncoding];
      message = [[NSString alloc] initWithData:tempData encoding:NSUTF8StringEncoding];
      return message;
-//     NSString *jsonString = nil;
-//     NSError *error;
-//     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:object
-//                                                        options:NSJSONWritingPrettyPrinted
-//                                                          error:&error];
-//     if (!jsonData) {
-//         return nil;
-//     } else {
-//         jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-//     }
-     
-//     return jsonString;
  }
 
 
@@ -116,16 +162,6 @@ typedef enum  {
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         return;
     }
-    // NSString* noteInfosJson = [command.arguments objectAtIndex:0];
-    // if([self isEmpty:noteInfosJson]){
-    //     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:SWIFT_CDVCommandStatus_ERROR messageAsString:@"运单信息不能为空！"];
-    //     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-    //     return;
-    // }
-    // NSData *jsonData = [noteInfosJson dataUsingEncoding:NSUTF8StringEncoding];
-    // NSArray *noteInfosArr = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:nil];
-    //假数据
-//    NSArray *noteInfosArr = [NSArray arrayWithObject:@{@"shippingNoteNumber":@"4560987",@"serialNumber":@"1245790",@"startCountrySubdivisionCode":@"320571000000",@"endCountrySubdivisionCode":@"320506405000"}];
     
     MapService* service = [MapService new];
     
@@ -135,7 +171,6 @@ typedef enum  {
             
             [self buildResult:YES andModel:model andError:error andCommand:command];
             
-//            [self alertDialog:str andIsError:NO];
         }];
     }else{
 

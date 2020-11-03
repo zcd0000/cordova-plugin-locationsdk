@@ -10,7 +10,10 @@
     <js-module name="LocationSdk" src="www/locationSdk.js">
         <clobbers target="LocationSdk" />
     </js-module>
-    <platform name="android">
+
+    <!-- <dependency id="cordova-plugin-advanced-http" version=">=2.2.0" /> -->
+    
+        <platform name="android">
         <config-file parent="/*" target="res/xml/config.xml">
             <feature name="LocationSdk">
                 <param name="android-package" value="com.yqtms.cordova.plugin.location.LocationSdk" />
@@ -25,8 +28,8 @@
         <config-file mode="merge" parent="/manifest/application" target="app/src/main/AndroidManifest.xml">
             <!-- 定位需要的服务 -->
             <meta-data android:name="com.amap.api.v2.apikey" android:value="@string/amap_apikey" />
-            <activity android:label="客户地图" android:name="com.yqtms.locationsdk.amap.activity.MapActivity" android:theme="@android:style/Theme.NoTitleBar" />
-            <activity android:label="我的轨迹" android:name="com.yqtms.locationsdk.amap.activity.TraceActivity" android:theme="@android:style/Theme.NoTitleBar" />
+            <activity android:label="我的轨迹" android:name="com.yqtms.locationsdk.amap.activity.MapActivity" android:theme="@android:style/Theme.NoTitleBar" />
+            <activity android:label="预估路线" android:name="com.yqtms.locationsdk.amap.activity.TraceActivity" android:theme="@android:style/Theme.NoTitleBar" />
         </config-file>
         <config-file mode="merge" parent="/manifest" target="app/src/main/AndroidManifest.xml">
             <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
@@ -41,8 +44,41 @@
             </feature>
         </config-file>
 
+        <resource-file src="src/ios/libs/CDVLocationsdk.bundle"/>
+
         <header-file src="src/ios/LocationSdk.h" />
         <source-file src="src/ios/LocationSdk.m" />
+        <header-file src="src/ios/MapHeaderView.h" />
+        <source-file src="src/ios/MapHeaderView.m" />
+        <header-file src="src/ios/MMLocationTracker.h" />
+        <source-file src="src/ios/MMLocationTracker.m" />
+        <header-file src="src/ios/MMLocationManager.h" />
+        <source-file src="src/ios/MMLocationManager.m" />
+        <header-file src="src/ios/MapViewController.h" />
+        <source-file src="src/ios/MapViewController.m" />
+        <header-file src="src/ios/TraceViewController.h" />
+        <source-file src="src/ios/TraceViewController.m" />
+        <header-file src="src/ios/NSObject+ImprovedKVC.h" />
+        <source-file src="src/ios/NSObject+ImprovedKVC.m" />
+        <header-file src="src/ios/UtilsForLocationsdk.h" />
+        <source-file src="src/ios/UtilsForLocationsdk.m" />
+        <header-file src="src/ios/ZTGCDTimerManager.h" />
+        <source-file src="src/ios/ZTGCDTimerManager.m" />
+
+        <header-file src="src/ios/entities/AMapAddress.h" />
+        <source-file src="src/ios/entities/AMapAddress.m" />
+        <header-file src="src/ios/entities/AMapLocationInfo.h" />
+        <source-file src="src/ios/entities/AMapLocationInfo.m" />
+        <header-file src="src/ios/entities/AMapRouteInfo.h" />
+        <source-file src="src/ios/entities/AMapRouteInfo.m" />
+        <header-file src="src/ios/entities/AMapSessionInfo.h" />
+        <source-file src="src/ios/entities/AMapSessionInfo.m" />
+        <header-file src="src/ios/entities/AMapVehicleLocationInfo.h" />
+        <source-file src="src/ios/entities/AMapVehicleLocationInfo.m" />
+        <header-file src="src/ios/entities/LocationPoint.h" />
+        <source-file src="src/ios/entities/LocationPoint.m" />
+        <header-file src="src/ios/entities/UpdatePositionOptions.h" />
+        <source-file src="src/ios/entities/UpdatePositionOptions.m" />
 
         <framework src="src/ios/libs/MapManager.framework" custom="true"/>
          
@@ -51,6 +87,8 @@
             </config>
               <pods use-frameworks="true">
                 <pod name="AMapLocation" />
+                <pod name="AMap3DMap"/>
+                <pod name="MJExtension"/>>
                 <pod name="GMObjC" spec="3.0.0" />
               </pods>
         </podspec>
