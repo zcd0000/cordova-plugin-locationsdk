@@ -103,7 +103,7 @@
 
 // - (void)postLocationInfos:(NSString *)remoteUrl sessionInfo:(AMapSessionInfo*)sessionInfo
 // {
-    
+    // todo 等待上传定位数据到后台
 // }
 
 // #pragma mark HttpHelper
