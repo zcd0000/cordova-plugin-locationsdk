@@ -12,21 +12,23 @@
         <clobbers target="LocationSdk" />
     </js-module>
 
-    <!-- <dependency id="cordova-plugin-advanced-http" version=">=2.2.0" /> -->
-    
-        <platform name="android">
+    <platform name="android">
         <config-file parent="/*" target="res/xml/config.xml">
             <feature name="LocationSdk">
                 <param name="android-package" value="com.yqtms.cordova.plugin.location.LocationSdk" />
                 <param name="onload" value="true" />
             </feature>
         </config-file>
-        <!-- android -->
-
         <source-file src="src/android/LocationSdk.java" target-dir="app/src/main/java/com/yqtms/cordova/plugin/location" />
         <source-file src="src/android/res/values/locationsdk-string.xml" target-dir="app/src/main/res/values" />
         <lib-file src="src/android/libs/locationsdk.aar" />
         <config-file mode="merge" parent="/manifest/application" target="app/src/main/AndroidManifest.xml">
+            <!-- 定位需要的服务 -->
+            <meta-data android:name="com.amap.api.v2.apikey" android:value="@string/amap_apikey" />
+            <activity android:label="我的轨迹" android:name="com.yqtms.locationsdk.amap.activity.MapActivity" android:theme="@android:style/Theme.NoTitleBar" />
+            <activity android:label="预估路线" android:name="com.yqtms.locationsdk.amap.activity.TraceActivity" android:theme="@android:style/Theme.NoTitleBar" />
+        </config-file>
+        <config-file mode="merge" parent="/manifest" target="app/src/main/AndroidManifest.xml">
             <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
             <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
             <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -38,12 +40,6 @@
             <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
             <uses-feature android:name="android.hardware.location" />
             <uses-feature android:name="android.hardware.location.gps" />
-            <!-- 定位需要的服务 -->
-            <meta-data android:name="com.amap.api.v2.apikey" android:value="@string/amap_apikey" />
-            <activity android:label="我的轨迹" android:name="com.yqtms.locationsdk.amap.activity.MapActivity" android:theme="@android:style/Theme.NoTitleBar" />
-            <activity android:label="预估路线" android:name="com.yqtms.locationsdk.amap.activity.TraceActivity" android:theme="@android:style/Theme.NoTitleBar" />
-        </config-file>
-        <config-file mode="merge" parent="/manifest" target="app/src/main/AndroidManifest.xml">
             <uses-permission android:name="android.permission.MANAGE_DOCUMENTS" />
         </config-file>
         <framework custom="true" src="src/android/build-extra.gradle" type="gradleReference" />
@@ -100,7 +96,7 @@
             <pods use-frameworks="true">
                 <pod name="AMapLocation" />
                 <pod name="AMap3DMap"/>
-                <pod name="MJExtension"/>>
+                <pod name="MJExtension"/>
                 <pod name="GMObjC" spec="3.0.0" />
             </pods>
         </podspec>
